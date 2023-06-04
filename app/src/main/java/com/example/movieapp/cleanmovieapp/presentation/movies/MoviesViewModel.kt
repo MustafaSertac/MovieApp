@@ -7,29 +7,33 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieapp.cleanmovieapp.domain.use_case.get_movies.GetMovieUseCase
 import com.example.movieapp.cleanmovieapp.util.Resource
+import dagger.hilt.android.HiltAndroidApp
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+@HiltViewModel
+
 class MoviesViewModel @Inject constructor(
-    private val getMovieuseCase:GetMovieUseCase,
+    private val getMoviesUseCase: GetMovieUseCase
+) : ViewModel() {
+
+    private val _state = mutableStateOf<MoviesState>(MoviesState())
+    val state : State<MoviesState> = _state
 
     private var job : Job? = null
-    ): ViewModel()
 
-{
-    private val _state= mutableStateOf<MoviesState>(MoviesState())
-    val state: State<MoviesState> =_state
-    init{
-getMovies(_state.value.search)
+    init {
+        getMovies(_state.value.search)
     }
 
 
     private fun     getMovies(search:String){
         job?.cancel()
-        job = getMovieuseCase.executGetMovies(search).onEach {
+        job = getMoviesUseCase.executGetMovies(search).onEach {
             when(it){
                 is Resource.Success->{
                     _state.value = MoviesState(movies = it.data ?: emptyList())
@@ -48,6 +52,12 @@ getMovies(_state.value.search)
         }.launchIn(viewModelScope)
     }
     fun onEvent(event:MoviesEvent){
+        when(event) {
+            is MoviesEvent.search -> {
+                getMovies(event.search)
+            }
+
+        }
 
     }
     }

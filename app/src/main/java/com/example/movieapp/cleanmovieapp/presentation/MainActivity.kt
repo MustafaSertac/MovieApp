@@ -13,7 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.movieapp.cleanmovieapp.presentation.ui.theme.MovieAppTheme
+import com.example.movieapp.cleanmovieapp.presentation.movies.views.MovieScreen
+
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -22,15 +23,16 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MovieAppTheme {
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController= rememberNavController()
-                    NavHost(navController = navController, startDestination = "" ){
+                    NavHost(navController = navController, startDestination = Screen.MovieScreen.route ){
                         composable(route=Screen.MovieScreen.route){
+                            MovieScreen(navController = navController)
 
                         }
                         composable(route=Screen.MovieDetailScreen.route){
@@ -41,7 +43,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
@@ -51,10 +53,3 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MovieAppTheme {
-        Greeting("Android")
-    }
-}
