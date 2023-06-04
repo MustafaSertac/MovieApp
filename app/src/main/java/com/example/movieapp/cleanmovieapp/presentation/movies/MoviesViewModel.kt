@@ -3,6 +3,7 @@ package com.example.movieapp.cleanmovieapp.presentation.movies
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieapp.cleanmovieapp.domain.use_case.get_movies.GetMovieUseCase
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 
 class MoviesViewModel @Inject constructor(
-    private val getMoviesUseCase: GetMovieUseCase
+    private val getMoviesUseCase: GetMovieUseCase,
+    private val sttateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _state = mutableStateOf<MoviesState>(MoviesState())
